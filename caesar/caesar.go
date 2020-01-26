@@ -1,39 +1,57 @@
-package main
+package caesar
 
 import (
 	"fmt"
 	"strings"
+
+	"github.com/Duke9289/cracking-codes-with-go/consts"
 )
 
-func main() {
-	message := "This is my secret message"
-	key := 13
-
-	mode := "encrypt"
-
-	SYMBOLS := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 !?."
+func Encrypt(key int, message string, mode string) string {
 
 	translated := ""
 
 	for _, runeValue := range message {
-		if strings.ContainsRune(SYMBOLS, runeValue) {
+		if strings.ContainsRune(consts.SYMBOLS, runeValue) {
 			var translatedIndex int
-			symbolIndex := strings.Index(SYMBOLS, string(runeValue))
+			symbolIndex := strings.Index(consts.SYMBOLS, string(runeValue))
 			if mode == "encrypt" {
 				translatedIndex = symbolIndex + key
 			} else {
 				translatedIndex = symbolIndex - key
 			}
 
-			if translatedIndex >= len(SYMBOLS) {
-				translatedIndex = translatedIndex - len(SYMBOLS)
+			if translatedIndex >= len(consts.SYMBOLS) {
+				translatedIndex = translatedIndex - len(consts.SYMBOLS)
 			} else if translatedIndex < 0 {
-				translatedIndex = translatedIndex + len(SYMBOLS)
+				translatedIndex = translatedIndex + len(consts.SYMBOLS)
 			}
-			translated += string(SYMBOLS[translatedIndex])
+			translated += string(consts.SYMBOLS[translatedIndex])
 		} else {
 			translated += string(runeValue)
 		}
 	}
-	fmt.Println(translated)
+	return translated
+}
+
+func Crack(message string) {
+
+	for i := 0; i < len(consts.SYMBOLS); i++ {
+		translated := ""
+		for _, runeValue := range message {
+			if strings.ContainsRune(consts.SYMBOLS, runeValue) {
+				var translatedIndex int
+				symbolIndex := strings.Index(consts.SYMBOLS, string(runeValue))
+				translatedIndex = symbolIndex - i
+
+				if translatedIndex < 0 {
+					translatedIndex = translatedIndex + len(consts.SYMBOLS)
+				}
+				translated += string(consts.SYMBOLS[translatedIndex])
+			} else {
+				translated += string(runeValue)
+			}
+		}
+		fmt.Printf("Key %d: %s\n", i, translated)
+	}
 }
