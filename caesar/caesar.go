@@ -2,12 +2,29 @@ package caesar
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Duke9289/cracking-codes-with-go/consts"
 )
 
-func Encrypt(key int, message string, mode string) string {
+func Cipher(message string, inputKey string, mode string) string {
+	var result string
+	key, err := strconv.Atoi(inputKey)
+	if err != nil {
+		return "The key for a caesar cipher must be an integer"
+	}
+	switch mode {
+	case "encrypt", "decrypt":
+		result = encrypt(key, message, mode)
+	case "crack":
+		result = crack(message)
+	}
+
+	return result
+}
+
+func encrypt(key int, message string, mode string) string {
 
 	translated := ""
 
@@ -34,7 +51,8 @@ func Encrypt(key int, message string, mode string) string {
 	return translated
 }
 
-func Crack(message string) {
+func crack(message string) string {
+	var result string
 
 	for i := 0; i < len(consts.SYMBOLS); i++ {
 		translated := ""
@@ -52,6 +70,7 @@ func Crack(message string) {
 				translated += string(runeValue)
 			}
 		}
-		fmt.Printf("Key %d: %s\n", i, translated)
+		result += fmt.Sprintf("Key %d: %s\n", i, translated)
 	}
+	return result
 }

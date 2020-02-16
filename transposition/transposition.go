@@ -2,10 +2,26 @@ package transposition
 
 import (
 	"math"
+	"strconv"
 	"strings"
 )
 
-func Encrypt(key int, message string) string {
+func Cipher(message string, inputKey string, mode string) string {
+	var result string
+	key, err := strconv.Atoi(inputKey)
+	if err != nil {
+		return "The key for a transposition cipher must be an integer"
+	}
+	switch mode {
+	case "encrypt":
+		result = encrypt(key, message)
+	case "decrypt":
+		result = decrypt(key, message)
+	}
+	return result
+}
+
+func encrypt(key int, message string) string {
 	ciphertext := make([]string, len(message))
 
 	for i := 0; i < key; i++ {
@@ -20,7 +36,7 @@ func Encrypt(key int, message string) string {
 	return strings.Join(ciphertext, "")
 }
 
-func Decrypt(key int, message string) string {
+func decrypt(key int, message string) string {
 	numOfColumns := int(math.Ceil(float64(len(message)) / float64(key)))
 	numOfRows := key
 	numOfShadedColumns := (numOfColumns * numOfRows) - len(message)
