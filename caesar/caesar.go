@@ -26,9 +26,9 @@ func encrypt(key int, message string, decrypt bool) string {
 			var translatedIndex int
 			symbolIndex := strings.Index(consts.SYMBOLS, string(runeValue))
 			if decrypt {
-				translatedIndex = symbolIndex + key
-			} else {
 				translatedIndex = symbolIndex - key
+			} else {
+				translatedIndex = symbolIndex + key
 			}
 
 			if translatedIndex >= len(consts.SYMBOLS) {
@@ -63,7 +63,7 @@ func crack(message string) string {
 				translated += string(runeValue)
 			}
 		}
-		result += fmt.Sprintf("Key %d: %s\n", i, translated)
+		result += fmt.Sprintf("Key %d: %s", i, translated)
 	}
 	return result
 }
