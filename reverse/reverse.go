@@ -1,6 +1,6 @@
 package reverse
 
-func Cipher(message string, key string, mode string) string {
+func Cipher(message string, key string, decrypt bool) string {
 	return reverse(message)
 }
 

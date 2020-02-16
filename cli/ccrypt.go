@@ -11,33 +11,26 @@ import (
 	"github.com/Duke9289/cracking-codes-with-go/transposition"
 )
 
-/*
-<cipher name>
-encrypt|decrypt|crack -e|d|c
-<key>
--i|input <filename> ? if null, stdin
--o|output <filename> ? if null, stdout
-*/
-
-var ciphers = map[string]func(string, string, string) string{
+var ciphers = map[string]func(string, string, bool) string{
 	"caesar":        caesar.Cipher,
 	"reverse":       reverse.Cipher,
 	"transposition": transposition.Cipher,
 }
 
 func main() {
-	var cipher string
-	flag.StringVar(&cipher, "c", "", "The cipher type")
-
-	var mode string
-	flag.StringVar(&mode, "m", "encrypt", "Whether to encrypt, decrypt, or crack")
-
-	var key string
-	flag.StringVar(&key, "k", "", "The cipher key")
+	var decrypt bool
+	flag.BoolVar(&decrypt, "d", false, "Decrypt the message rather than encrypt it")
 
 	flag.Parse()
 
+	input := flag.Args()
+	cipher := input[0]
+	var key string
+	if len(input) == 2 {
+		key = input[1]
+	}
+
 	reader := bufio.NewReader(os.Stdin)
 	text, _ := reader.ReadString('\n')
-	fmt.Println(ciphers[cipher](text, key, mode))
+	fmt.Println(ciphers[cipher](text, key, decrypt))
 }

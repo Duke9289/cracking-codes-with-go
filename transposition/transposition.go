@@ -1,22 +1,23 @@
 package transposition
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
 )
 
-func Cipher(message string, inputKey string, mode string) string {
+func Cipher(message string, inputKey string, decryptFlag bool) string {
 	var result string
 	key, err := strconv.Atoi(inputKey)
 	if err != nil {
-		return "The key for a transposition cipher must be an integer"
+		fmt.Println("No valid key supplied.  Attempting to crack.")
+		return "TRANSPOSITION CRACK NOT YET IMPLEMENTED"
 	}
-	switch mode {
-	case "encrypt":
-		result = encrypt(key, message)
-	case "decrypt":
+	if decryptFlag {
 		result = decrypt(key, message)
+	} else {
+		result = encrypt(key, message)
 	}
 	return result
 }

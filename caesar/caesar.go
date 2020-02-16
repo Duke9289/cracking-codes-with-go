@@ -8,23 +8,16 @@ import (
 	"github.com/Duke9289/cracking-codes-with-go/consts"
 )
 
-func Cipher(message string, inputKey string, mode string) string {
-	var result string
+func Cipher(message string, inputKey string, mode bool) string {
 	key, err := strconv.Atoi(inputKey)
 	if err != nil {
-		return "The key for a caesar cipher must be an integer"
+		fmt.Println("No valid key entered, attempting to crack.")
+		return crack(message)
 	}
-	switch mode {
-	case "encrypt", "decrypt":
-		result = encrypt(key, message, mode)
-	case "crack":
-		result = crack(message)
-	}
-
-	return result
+	return encrypt(key, message, mode)
 }
 
-func encrypt(key int, message string, mode string) string {
+func encrypt(key int, message string, decrypt bool) string {
 
 	translated := ""
 
@@ -32,7 +25,7 @@ func encrypt(key int, message string, mode string) string {
 		if strings.ContainsRune(consts.SYMBOLS, runeValue) {
 			var translatedIndex int
 			symbolIndex := strings.Index(consts.SYMBOLS, string(runeValue))
-			if mode == "encrypt" {
+			if decrypt {
 				translatedIndex = symbolIndex + key
 			} else {
 				translatedIndex = symbolIndex - key
